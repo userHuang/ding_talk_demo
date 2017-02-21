@@ -25,11 +25,13 @@ def logined_account(request):
     username = request.POST.get('username', 'empty_username')
     password = request.POST.get('password', 'empty_password')
     user = auth.authenticate(username=username, password=password)
-
     if user:
         auth.login(request, user)
         user_id = user.id
         user_profile = UserProfile.objects.filter(user_id=user_id)
-        return HttpResponseRedirect('/ding_approval/')
+        if user_profile:
+            return HttpResponseRedirect('/ding_approval/')
+        else:
+            return HttpResponseRedirect('/user/')
     else:
         return HttpResponseRedirect('/account/login/')
